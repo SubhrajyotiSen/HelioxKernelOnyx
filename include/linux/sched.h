@@ -1270,6 +1270,7 @@ struct task_struct {
 	atomic_t usage;
 	unsigned int flags;	/* per process flags, defined below */
 	unsigned int ptrace;
+	unsigned int yield_count;
 
 #ifdef VENDOR_EDIT
 //huruihuan add for kill task in D status
@@ -2064,6 +2065,14 @@ extern unsigned int sysctl_sched_min_granularity;
 extern unsigned int sysctl_sched_wakeup_granularity;
 extern unsigned int sysctl_sched_child_runs_first;
 extern unsigned int sysctl_sched_wake_to_idle;
+extern unsigned int sysctl_sched_wakeup_load_threshold;
+#ifdef CONFIG_SCHED_DEBUG
+extern __read_mostly unsigned int sysctl_sched_yield_sleep_duration;
+extern __read_mostly int sysctl_sched_yield_sleep_threshold;
+#else
+extern const unsigned int sysctl_sched_yield_sleep_duration;
+extern const int sysctl_sched_yield_sleep_threshold;
+#endif
 
 enum sched_tunable_scaling {
 	SCHED_TUNABLESCALING_NONE,
