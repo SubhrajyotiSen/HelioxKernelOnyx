@@ -232,6 +232,7 @@ static atomic_t keypad_enable;
 static struct proc_dir_entry *prEntry_dtap = NULL;
 static struct proc_dir_entry *prEntry_coodinate  = NULL;
 static struct proc_dir_entry *prEntry_double_tap = NULL;
+static struct proc_dir_entry *prEntry_sweep_wake_tap = NULL;
 static struct proc_dir_entry *prEntry_vendor_id  = NULL;
 
 
@@ -4059,6 +4060,13 @@ static const struct file_operations keypad_enable_proc_fops = {
 	.owner = THIS_MODULE,
 };
 
+static const struct file_operations tp_sweep_wake_proc_fops = {
+	.write = tp_sweep_wake_write_func,
+	.read =  tp_sweep_wake_read_func,
+	.open = simple_open,
+	.owner = THIS_MODULE,
+};
+
 static const struct file_operations coordinate_proc_fops = {
 	.read =  coordinate_proc_read_func,
 	.open = simple_open,
@@ -4179,6 +4187,13 @@ static int init_synaptics_proc(void)
 		ret = -ENOMEM;
 		printk(KERN_INFO"init_synaptics_proc: Couldn't create proc entry\n");
 	}
+
+	prEntry_sweep_wake_tap = proc_create( "sweep_wake_enable", 0666, prEntry_tp, &tp_sweep_wake_proc_fops);
+	if(prEntry_sweep_wake_tap == NULL){
+		ret = -ENOMEM;
+		printk(KERN_INFO"init_synaptics_proc: Couldn't create proc entry\n");
+	}
+
 	prEntry_coodinate = proc_create("coordinate", 0444, prEntry_tp, &coordinate_proc_fops);
 	if(prEntry_coodinate == NULL){
 		ret = -ENOMEM;
