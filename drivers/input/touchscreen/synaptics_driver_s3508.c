@@ -203,6 +203,8 @@ static struct workqueue_struct *speedup_resume_wq = NULL;
 static struct proc_dir_entry *prEntry_tp = NULL;
 static struct proc_dir_entry *prEntry_tmp = NULL;
 static struct proc_dir_entry *prEntry_tpreset = NULL;
+static struct input_dev * boeffla_syn_pwrdev;
+static DEFINE_MUTEX(boeffla_syn_pwrkeyworklock);
 
 #ifdef SUPPORT_TP_SLEEP_MODE
 	static atomic_t sleep_enable;
@@ -397,6 +399,27 @@ struct synaptics_optimize_data{
 	const struct i2c_device_id *dev_id;
 };
 static struct synaptics_optimize_data optimize_data;
+
+
+static void boeffla_syn_presspwr(struct work_struct * boeffla_syn_presspwr_work)
+{
+	if (!mutex_trylock(&boeffla_syn_pwrkeyworklock))
+		return;
+
+	input_event(boeffla_syn_pwrdev, EV_KEY, KEY_POWER, 1);
+	input_event(boeffla_syn_pwrdev, EV_SYN, 0, 0);
+	msleep(60);
+
+	input_event(boeffla_syn_pwrdev, EV_KEY, KEY_POWER, 0);
+	input_event(boeffla_syn_pwrdev, EV_SYN, 0, 0);
+	msleep(60);
+
+    mutex_unlock(&boeffla_syn_pwrkeyworklock);
+	return;
+}
+static DECLARE_WORK(boeffla_syn_presspwr_work, boeffla_syn_presspwr);
+
+
 static void synaptics_ts_probe_func(struct work_struct *w)
 {
 	struct i2c_client *client_optimize = optimize_data.client;
@@ -1552,7 +1575,14 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 		input_sync(ts->input_dev);
 		input_report_key(ts->input_dev, keyCode, 0);
 		input_sync(ts->input_dev);
-    }else{
+    }
+    else if ((gesture == Left2RightSwip && Left2RightSwip_gesture)||(gesture == Right2LeftSwip && Right2LeftSwip_gesture)\
+        ||(gesture == Up2DownSwip && Up2DownSwip_gesture)||(gesture == Down2UpSwip && Down2UpSwip_gesture))
+    {
+		// press powerkey
+		schedule_work(&boeffla_syn_presspwr_work);
+	}
+	else{
 		//if(is_project(OPPO_14005) || is_project(OPPO_15011)){
 			ret = i2c_smbus_read_i2c_block_data( ts->client, F12_2D_CTRL20, 3, &(reportbuf[0x0]) );
 			ret = reportbuf[2] & 0x20;
@@ -2111,7 +2141,8 @@ static int tp_double_write_func(struct file *file, const char __user *buffer, si
 	Circle_gesture = (buf[0] & BIT6)?1:0; //"O"
 	DouTap_gesture = (buf[0] & BIT7)?1:0; //double tap
 	if(DouTap_gesture||Circle_gesture||UpVee_gesture||LeftVee_gesture\
-        ||RightVee_gesture||DouSwip_gesture)
+        ||RightVee_gesture||DouSwip_gesture\
+        ||Left2RightSwip_gesture||Right2LeftSwip_gesture||Down2UpSwip_gesture||Up2DownSwip_gesture)
 	{
 		atomic_set(&double_enable, 1);
 	}
@@ -2148,6 +2179,74 @@ static int tp_double_write_func(struct file *file, const char __user *buffer, si
 				TPD_ERR("Please enter 0 or 1 to open or close the double-tap function\n");
 		}
 	}
+	return count;
+}
+
+static int tp_sweep_wake_read_func(struct file *file, char __user *user_buf, size_t count, loff_t *ppos)
+{
+	int ret = 0;
+	char page[PAGESIZE];
+	ret = sprintf(page, "%d\n", Left2RightSwip_gesture);
+	ret = simple_read_from_buffer(user_buf, count, ppos, page, strlen(page));
+	return ret;
+}
+
+static int tp_sweep_wake_write_func(struct file *file, const char __user *buffer, size_t count, loff_t *ppos)
+{
+	int ret = 0;
+	char buf[10];
+	if( count > 2)
+		return count;
+	if( copy_from_user(buf, buffer, count) ){
+		printk(KERN_INFO "%s: read proc input error.\n", __func__);
+		return count;
+	}
+
+	Left2RightSwip_gesture = (buf[0] & BIT0) ? 1 : 0;
+	Right2LeftSwip_gesture = (buf[0] & BIT0) ? 1 : 0;
+	Up2DownSwip_gesture = (buf[0] & BIT0) ? 1 : 0;
+	Down2UpSwip_gesture = (buf[0] & BIT0) ? 1 : 0;
+
+	if(DouTap_gesture||Circle_gesture||UpVee_gesture||LeftVee_gesture\
+        ||RightVee_gesture||DouSwip_gesture\
+        ||Left2RightSwip_gesture||Right2LeftSwip_gesture||Down2UpSwip_gesture||Up2DownSwip_gesture)
+	{
+		atomic_set(&double_enable, 1);
+	}
+	else
+	{
+		atomic_set(&double_enable, 0);
+	}
+		if(gesture_enable == 1)
+	{
+		switch(atomic_read(&double_enable)){
+			case 0:
+				TPD_ERR("tp_guesture_func will be disable\n");
+				ret = synaptics_enable_interrupt_for_gesture(ts_g, 0);
+				if( ret<0 )
+					ret = synaptics_enable_interrupt_for_gesture(ts_g, 0);
+				ret = i2c_smbus_write_byte_data(ts_g->client, F01_RMI_CTRL00, 0x01);
+				if( ret < 0 ){
+					TPD_ERR("write F01_RMI_CTRL00 failed\n");
+					return -1;
+				}
+				break;
+			case 1:
+				TPD_ERR("tp_guesture_func will be enable\n");
+				ret = i2c_smbus_write_byte_data(ts_g->client, F01_RMI_CTRL00, 0x80);
+				if( ret < 0 ){
+					TPD_ERR("write F01_RMI_CTRL00 failed\n");
+					return -1;
+				}
+				ret = synaptics_enable_interrupt_for_gesture(ts_g, 1);
+				if( ret<0 )
+					ret = synaptics_enable_interrupt_for_gesture(ts_g, 1);
+				break;
+			default:
+				TPD_ERR("Please enter 0 or 1 to open or close the double-tap function\n");
+		}
+	}
+
 	return count;
 }
 
@@ -5291,11 +5390,32 @@ static int fb_notifier_callback(struct notifier_block *self, unsigned long event
 #endif
 
 static int __init tpd_driver_init(void) {
+	int rc = 0;
+
 	printk("Synaptics:%s is called\n", __func__);
 	 if( i2c_add_driver(&tpd_i2c_driver)!= 0 ){
         TPDTM_DMESG("unable to add i2c driver.\n");
         return -1;
     }
+
+	// allocate and register input device for sending power key events
+	boeffla_syn_pwrdev = input_allocate_device();
+	if (!boeffla_syn_pwrdev)
+	{
+		pr_err("Can't allocate suspend autotest power button\n");
+		return -EFAULT;
+	}
+
+	input_set_capability(boeffla_syn_pwrdev, EV_KEY, KEY_POWER);
+	boeffla_syn_pwrdev->name = "boeffla_syn_pwrkey";
+	boeffla_syn_pwrdev->phys = "boeffla_syn_pwrkey/input0";
+	rc = input_register_device(boeffla_syn_pwrdev);
+	if (rc)
+	{
+		pr_err("%s: input_register_device err=%d\n", __func__, rc);
+		return -EFAULT;
+	}
+
 	return 0;
 }
 
