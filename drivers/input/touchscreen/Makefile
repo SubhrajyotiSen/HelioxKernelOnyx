@@ -91,3 +91,5 @@ obj-$(CONFIG_TOUCHSCREEN_GT9XX)		+= gt9xx/
 obj-$(CONFIG_STATE_NOTIFIER)		+= state_notifier.o
 obj-y	+= synaptics_driver_s3508.o
 obj-y	+= synaptics_redremote.o
+obj-y += touchboost.o
+obj-$(CONFIG_ALUCARD_TOUCHSCREEN_BOOST)	+= alu-t-boost.o
