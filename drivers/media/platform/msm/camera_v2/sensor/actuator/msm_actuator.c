@@ -829,6 +829,17 @@ static int32_t msm_actuator_set_position(
 		return -EFAULT;
 	}
 
+	if (!a_ctrl || !a_ctrl->func_tbl ||
+		!a_ctrl->func_tbl->actuator_parse_i2c_params) {
+		pr_err("failed. NULL actuator pointers.");
+		return -EFAULT;
+	}
+
+	if (a_ctrl->actuator_state != ACTUATOR_POWER_UP) {
+		pr_err("failed. Invalid actuator state.");
+		return -EFAULT;
+	}
+
 	a_ctrl->i2c_tbl_index = 0;
 	for (index = 0; index < set_pos->number_of_steps; index++) {
 		next_lens_position = set_pos->pos[index];
