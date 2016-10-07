@@ -219,7 +219,7 @@ static int wlan_send_sock_msg_to_app(tAniHdr *wmsg, int radio,
 	tAniNlHdr *wnl = NULL;
 	struct sk_buff *skb;
 	struct nlmsghdr *nlh;
-	int wmsg_length = wmsg->length;
+	int wmsg_length = ntohs(wmsg->length);
 	static int nlmsg_seq;
 
 	if (radio < 0 || radio > ANI_MAX_RADIOS) {
@@ -228,7 +228,8 @@ static int wlan_send_sock_msg_to_app(tAniHdr *wmsg, int radio,
 		return -EINVAL;
 	}
 
-	payload_len = wmsg_length + sizeof(wnl->radio);
+	payload_len = wmsg_length + sizeof(wnl->radio) + sizeof(tAniHdr);
+
 	tot_msg_len = NLMSG_SPACE(payload_len);
 	skb = dev_alloc_skb(tot_msg_len);
 	if (skb == NULL) {
@@ -797,7 +798,9 @@ static int wlan_logging_proc_sock_rx_msg(struct sk_buff *skb)
 	tAniNlHdr *wnl;
 	int radio;
 	int type;
-	int ret;
+
+	int ret, len;
+	unsigned long flags;
 
         if (TRUE == vos_isUnloadInProgress())
         {
@@ -812,6 +815,15 @@ static int wlan_logging_proc_sock_rx_msg(struct sk_buff *skb)
 	if (radio < 0 || radio > ANI_MAX_RADIOS) {
 		pr_err("%s: invalid radio id [%d]\n",
 				__func__, radio);
+		return -EINVAL;
+	}
+
+	len = ntohs(wnl->wmsg.length) + sizeof(tAniNlHdr);
+
+	if (len > skb_headlen(skb))
+	{
+		pr_err("%s: invalid length, msgLen:%x skb len:%x headLen: %d data_len: %d",
+		       __func__, len, skb->len, skb_headlen(skb), skb->data_len);
 		return -EINVAL;
 	}
 
