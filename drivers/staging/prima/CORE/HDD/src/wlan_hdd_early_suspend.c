@@ -782,6 +782,7 @@ void hdd_conf_ns_offload(hdd_adapter_t *pAdapter, int fenable)
         in6_dev = __in6_dev_get(pAdapter->dev);
         if (NULL != in6_dev)
         {
+            read_lock_bh(&in6_dev->lock);
             list_for_each(p, &in6_dev->addr_list)
             {
                 if (i >= slot_index)
@@ -822,6 +823,7 @@ void hdd_conf_ns_offload(hdd_adapter_t *pAdapter, int fenable)
                     i++;
                 }
             }
+            read_unlock_bh(&in6_dev->lock);
 
             vos_mem_zero(&offLoadRequest, sizeof(offLoadRequest));
             for (i =0; i < slot_index; i++)
