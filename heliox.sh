@@ -84,10 +84,8 @@ wget -O $HOST_FILE"3" "http://adaway.org/hosts.txt"
 cat $HOST_FILE"4" >> $HOST_FILE"3"; rm -rf $HOST_FILE"4"
 wget -O $HOST_FILE"2" "http://hosts-file.net/ad_servers.txt"
 cat $HOST_FILE"3" >> $HOST_FILE"2"; rm -rf $HOST_FILE"3"
-wget -O $HOST_FILE"1" "http://winhelp2002.mvps.org/hosts.txt"
-cat $HOST_FILE"2" >> $HOST_FILE"1"; rm -rf $HOST_FILE"2"
-sed '/^#/ d' $HOST_FILE"1" > $HOST_FILE; 
-rm -rf $HOST_FILE"1"
+sed '/^#/ d' $HOST_FILE"2" > $HOST_FILE; 
+rm -rf $HOST_FILE"2"
 sort $HOST_FILE | uniq -u > $HOSTS_FILE; rm -rf $HOST_FILE
 sed '/localhost/d' $HOSTS_FILE > $HOST_FILE; rm -rf $HOSTS_FILE
 sed -i -e 's/0.0.0.0/127.0.0.1/g' $HOST_FILE; sed -i '1i #adblocker' $HOST_FILE
