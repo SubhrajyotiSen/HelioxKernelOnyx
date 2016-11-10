@@ -55,7 +55,7 @@ echo "                                   Compiling BlackReactor-Kernel          
 echo "                    "
 echo -e "$green ********************************************************************************************** $nocol"
 make clean && make mrproper
-make onyx_defconfig
+make cm_onyx_defconfig
 make -j32
 if ! [ -a $KERN_IMG ];
 then
@@ -79,13 +79,13 @@ block_ads() {
 HOSTS_FILE="$OUT_DIR/system/hosts"
 HOST_FILE="$OUT_DIR/system/host"
 rm -rf "$HOSTS_FILE"
-wget -O $HOST_FILE"4" "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext"
-wget -O $HOST_FILE"3" "http://adaway.org/hosts.txt"
-cat $HOST_FILE"4" >> $HOST_FILE"3"; rm -rf $HOST_FILE"4"
-wget -O $HOST_FILE"2" "http://hosts-file.net/ad_servers.txt"
-cat $HOST_FILE"3" >> $HOST_FILE"2"; rm -rf $HOST_FILE"3"
-wget -O $HOST_FILE"1" "http://winhelp2002.mvps.org/hosts.txt"
-cat $HOST_FILE"2" >> $HOST_FILE"1"; rm -rf $HOST_FILE"2"
+# wget -O $HOST_FILE"4" "http://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext"
+# wget -O $HOST_FILE"3" "http://adaway.org/hosts.txt"
+# cat $HOST_FILE"4" >> $HOST_FILE"3"; rm -rf $HOST_FILE"4"
+# wget -O $HOST_FILE"2" "http://hosts-file.net/ad_servers.txt"
+# cat $HOST_FILE"3" >> $HOST_FILE"2"; rm -rf $HOST_FILE"3"
+# wget -O $HOST_FILE"1" "http://winhelp2002.mvps.org/hosts.txt"
+# cat $HOST_FILE"2" >> $HOST_FILE"1"; rm -rf $HOST_FILE"2"
 sed '/^#/ d' $HOST_FILE"1" > $HOST_FILE; 
 rm -rf $HOST_FILE"1"
 sort $HOST_FILE | uniq -u > $HOSTS_FILE; rm -rf $HOST_FILE
