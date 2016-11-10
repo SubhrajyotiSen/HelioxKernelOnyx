@@ -55,7 +55,7 @@ echo "                                   Compiling Heliox-Kernel                
 echo "                    "
 echo -e "$green ********************************************************************************************** $nocol"
 make clean && make mrproper
-make onyx_defconfig
+make cm_onyx_defconfig
 make -j32
 if ! [ -a $KERN_IMG ];
 then
