@@ -29,7 +29,7 @@ nocol='\033[0m'
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/arch/arm/boot/zImage-dtb
 OUT_DIR=$KERNEL_DIR/zipping/onyx
-REACTOR_VERSION="beta-0.2"
+HELIOX_VERSION="beta-0.2"
 
 # Device Spceifics
 export ARCH=arm
@@ -51,7 +51,7 @@ compile_kernel ()
 {
 echo -e "$green ********************************************************************************************** $nocol"
 echo "                    "
-echo "                                   Compiling BlackReactor-Kernel                    "
+echo "                                   Compiling Heliox-Kernel                    "
 echo "                    "
 echo -e "$green ********************************************************************************************** $nocol"
 make clean && make mrproper
@@ -71,7 +71,7 @@ zipping() {
 # make new zip
 cp $KERN_IMG $OUT_DIR/zImage
 cd $OUT_DIR
-zip -r Heliox-onyx-$REACTOR_VERSION-$(date +"%Y%m%d")-$(date +"%H%M%S").zip *
+zip -r Heliox-onyx-$HELIOX_VERSION-$(date +"%Y%m%d")-$(date +"%H%M%S").zip *
 
 }
 
