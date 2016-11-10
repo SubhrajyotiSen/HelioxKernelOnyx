@@ -29,7 +29,7 @@ nocol='\033[0m'
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/arch/arm/boot/zImage-dtb
 OUT_DIR=$KERNEL_DIR/zipping/onyx
-REACTOR_VERSION="beta-0.12"
+REACTOR_VERSION="beta-0.2"
 
 # Device Spceifics
 export ARCH=arm
