@@ -12,7 +12,9 @@ device.name1=OnePlus
 device.name2=ONE
 device.name3=onyx
 device.name4=E1003
-device.name5=
+device.name5=E1000
+device.name6=E1001
+device.name7=E1005
 
 # shell variables
 block=/dev/block/platform/msm_sdcc.1/by-name/boot;
