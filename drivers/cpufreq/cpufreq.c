@@ -15,11 +15,7 @@
  *
  */
 
-<<<<<<< HEAD
-#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
-=======
->>>>>>> 970a98b... cpufreq: Move get_cpu_idle_time() to cpufreq.c
 #include <asm/cputime.h>
 #include <linux/kernel.h>
 #include <linux/kernel_stat.h>
