@@ -131,6 +131,7 @@ config CPU_FREQ_DEFAULT_GOV_ZZMOOVE
 	frequency lookup tables and optimized scaling triggers instead 
 	% frequency steps to get smooth up/downscaling dependant on CPU load.
 
+<<<<<<< HEAD
 config CPU_FREQ_DEFAULT_GOV_DARKNESS
 	bool "darkness"
 	select CPU_FREQ_GOV_DARKNESS
@@ -149,6 +150,8 @@ config CPU_FREQ_DEFAULT_GOV_BIOSHOCK
 	help
 	  Default governor of BioShock kernel
 
+=======
+>>>>>>> parent of e2b8a07... Adopt pegasusq and darkness from dorimanx
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -270,6 +273,7 @@ config CPU_FREQ_GOV_ZZMOOVE
 	tristate "'zzmoove' cpufreq governor"
 	depends on CPU_FREQ	
 
+<<<<<<< HEAD
 config CPU_FREQ_GOV_DARKNESS
 	tristate "'darkness' cpufreq governor"
 	depends on CPU_FREQ
@@ -284,6 +288,8 @@ config CPU_FREQ_GOV_BIOSHOCK
 	  'bioshock' - More aggressive version of conservative
 
 
+=======
+>>>>>>> parent of e2b8a07... Adopt pegasusq and darkness from dorimanx
 menu "x86 CPU frequency scaling drivers"
 depends on X86
 source "drivers/cpufreq/Kconfig.x86"
