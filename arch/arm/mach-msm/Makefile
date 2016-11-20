@@ -429,7 +429,6 @@ obj-$(CONFIG_WALL_CLK_SYSFS) += wallclk_sysfs.o
 obj-$(CONFIG_HAS_MACH_MEMUTILS) += memutils/
 obj-$(CONFIG_ARCH_RANDOM) += early_random.o
 obj-$(CONFIG_PERFMAP) += perfmap.o
-
 #ifdef VENDOR_EDIT
 #Wanjc@OnlineRd.Driver, 2013/10/23, Add for OPPO device info
 obj-$(CONFIG_OPPO_DEVICE_IFNO)	+=  device_info.o
@@ -439,5 +438,3 @@ obj-$(CONFIG_OPPO_DEVICE_IFNO)	+=  device_info.o
 #Add by yangrujin@bsp, 2015/5/21, Add for project info
 obj-$(CONFIG_OEM_PROJECT_INFO) += project_info.o
 #endif /* VENDOR_EDIT */
-
-obj-$(CONFIG_MSM_HOTPLUG) += msm_hotplug.o
