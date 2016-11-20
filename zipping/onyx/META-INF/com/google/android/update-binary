@@ -55,9 +55,15 @@ fi;
 chmod -R 755 /tmp/anykernel/tools /tmp/anykernel/bin;
 bb=/tmp/anykernel/tools/busybox;
 
-ui_print "### Heliox-Kernel ###";
-ui_print " ";
-ui_print "### Subhrajyoti Sen ###";
+ui_print "  _    _          _   _                  "
+ui_print " | |  | |        | | (_)                 "
+ui_print " | |__| |   ___  | |  _    ___   __  __  "
+ui_print " |  __  |  / _ \ | | | |  / _ \  \ \/ /  "
+ui_print " | |  | | |  __/ | | | | | (_) |  >  <   "
+ui_print " |_|  |_|  \___| |_| |_|  \___/  /_/\_\  "
+                                       
+                                       
+ui_print "### By Subhrajyoti Sen ###";
 ui_print " ";
 
 
