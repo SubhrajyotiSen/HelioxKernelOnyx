@@ -1362,7 +1362,7 @@ static int __init cpufreq_smartmax_init(void) {
 	u64 idle_time;
 	int cpu = get_cpu();
 
-	idle_time = get_cpu_idle_time_us(cpu, &wall, 0);
+	idle_time = get_cpu_idle_time_us(cpu, &wall);
 	put_cpu();
 	if (idle_time != -1ULL) {
 		/*
