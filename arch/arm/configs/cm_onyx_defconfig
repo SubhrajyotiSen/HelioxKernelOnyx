@@ -3303,6 +3303,8 @@ CONFIG_NTFS_FS=y
 # CONFIG_NTFS_DEBUG is not set
 # CONFIG_NTFS_RW is not set
 
+CONFIG_SDCARD_FS=y
+
 #
 # Pseudo filesystems
 #
