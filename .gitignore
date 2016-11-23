@@ -101,3 +101,6 @@ x509.genkey
 all.config
 
 ./zipping/
+
+!zipping/onyx/modules/vendor/lib/libthermalioctl.so
+!zipping/onyx/modules/vendor/lib/libthermalclient.so
