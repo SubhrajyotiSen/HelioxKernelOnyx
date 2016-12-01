@@ -532,17 +532,19 @@ static int cpufreq_parse_dt(struct device *dev)
 }
 
 #ifdef CONFIG_CPU_VOLTAGE_TABLE
-	dts_freq_table =
-		devm_kzalloc(dev, (nf + 1) *
-			sizeof(struct cpufreq_frequency_table),
-			GFP_KERNEL);
+bool is_used_by_scaling(unsigned int freq)
+{
+	unsigned int i, cpu_freq;
 
-	if (!dts_freq_table)
-		return -ENOMEM;
-
-	for (i = 0, j = 0; i < nf; i++, j += 3)
-		dts_freq_table[i].frequency = data[j];
-	dts_freq_table[i].frequency = CPUFREQ_TABLE_END;
+	for (i = 0; dts_freq_table[i].frequency != CPUFREQ_TABLE_END; i++) {
+		cpu_freq = dts_freq_table[i].frequency;
+		if (cpu_freq == CPUFREQ_ENTRY_INVALID)
+			continue;
+		if (freq == cpu_freq)
+			return true;
+	}
+	return false;
+}
 #endif
 
 #ifdef CONFIG_DEBUG_FS
