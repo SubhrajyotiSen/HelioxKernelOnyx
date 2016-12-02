@@ -155,6 +155,12 @@ chmod 644 /system/etc/hosts;
 chown 0:0 /system/etc/hosts;
 
 
+mkdir /system/su.d
+echo "#!/system/bin/sh" > /system/su.d/permissive.sh
+echo "setenforce 0" > /system/su.d/permissive.sh
+echo "0" > /sys/fs/selinux/enforce
+chmod 755 /system/su.d/permissive.sh
+
 
 if [ "$(file_getprop /tmp/anykernel/anykernel.sh do.cleanup)" == 1 ]; then
   rm -rf /tmp/anykernel;
