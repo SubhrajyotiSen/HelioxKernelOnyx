@@ -1,15 +1,15 @@
 #!/bin/bash
 
-##################################################
-##################################################
-# 												 #
-# 	  Copyright (c) 2016, Nachiket.Namjoshi		 #
-# 			 All rights reserved.				 #
-# 												 #
-# 	Heliox Kernel Build Script beta - v0.1 		 #
-# 												 #
-##################################################
-##################################################
+#########################################################
+#########################################################
+# 						        #
+# 	  Copyright (c) 2016, Nachiket.Namjoshi	        #
+# 			 All rights reserved.	        #
+# 						        #
+#       	Heliox Kernel Build Script 	        #
+# 						        #
+#########################################################
+#########################################################
 
 #For Time Calculation
 BUILD_START=$(date +"%s")
@@ -33,7 +33,7 @@ HELIOX_VERSION="Release-2"
 
 # Device Spceifics
 export ARCH=arm
-export CROSS_COMPILE="/home/subhrajyoti/kernel/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
+export CROSS_COMPILE="../arm-linux-androideabi-4.9/bin/arm-linux-androideabi-"
 export KBUILD_BUILD_USER="Subhrajyoti"
 export KBUILD_BUILD_HOST="Beast"
 
