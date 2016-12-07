@@ -29,7 +29,7 @@ nocol='\033[0m'
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/arch/arm/boot/zImage-dtb
 OUT_DIR=$KERNEL_DIR/zipping/onyx
-HELIOX_VERSION="Release-2"
+HELIOX_VERSION="Release-3"
 
 # Device Spceifics
 export ARCH=arm
