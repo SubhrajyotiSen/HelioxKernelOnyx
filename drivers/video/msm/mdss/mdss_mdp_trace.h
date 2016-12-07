@@ -17,7 +17,7 @@
 #undef TRACE_SYSTEM
 #define TRACE_SYSTEM mdss
 #undef TRACE_INCLUDE_PATH
-#define TRACE_INCLUDE_PATH /home/subhrajyoti/kernel/HelioxKernel/drivers/video/msm/mdss/
+#define TRACE_INCLUDE_PATH /home/subhrajyoti12/kernel/HelioxKernelOnyx/drivers/video/msm/mdss/
 #undef TRACE_INCLUDE_FILE
 #define TRACE_INCLUDE_FILE mdss_mdp_trace
 
