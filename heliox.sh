@@ -2,12 +2,11 @@
 
 #########################################################
 #########################################################
-# 						        #
-# 	  Copyright (c) 2016, Nachiket.Namjoshi	        #
-# 			 All rights reserved.	        #
-# 						        #
-#       	Heliox Kernel Build Script 	        #
-# 						        #
+# 						       						    #
+# 	  Copyright (c) 2016, Nachiket.Namjoshi	      	    #
+# 			 All rights reserved.	      			    #
+# 						                                #
+#       	Heliox Kernel Build Script 	                #
 #########################################################
 #########################################################
 
@@ -29,7 +28,7 @@ nocol='\033[0m'
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/arch/arm/boot/zImage-dtb
 OUT_DIR=$KERNEL_DIR/zipping/onyx
-HELIOX_VERSION="Release-3"
+HELIOX_VERSION="Release-4"
 
 # Device Spceifics
 export ARCH=arm
@@ -55,7 +54,7 @@ echo "                                   Compiling Heliox-Kernel                
 echo "                    "
 echo -e "$green ********************************************************************************************** $nocol"
 make clean && make mrproper
-make cm_onyx_defconfig
+make heliox_defconfig
 make -j32
 if ! [ -a $KERN_IMG ];
 then
