@@ -55,7 +55,7 @@ echo "                    "
 echo -e "$green ********************************************************************************************** $nocol"
 make clean && make mrproper
 make heliox_defconfig
-make -j32
+make -j4
 if ! [ -a $KERN_IMG ];
 then
 echo -e "$red Kernel Compilation failed! Fix the errors! $nocol"
